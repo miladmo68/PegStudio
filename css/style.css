@@ -103,14 +103,71 @@
         top: 0;
     }
 
+    /* Horizontal shift / right “gutter”: clip page + bar; flex row min-width 0 so brand+toggler fit viewport */
+    html,
+    body {
+        overflow-x: hidden;
+        max-width: 100%;
+    }
+
+    body > .container-fluid.sticky-top {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .navbar > .container {
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    /* Stable flex wrap: no extra row gap; collapse reads as continuation of the same bar */
+    .navbar.navbar-expand-lg {
+        row-gap: 0;
+    }
+
+    .navbar {
+        padding-top: 10px;
+        padding-bottom: 6px;
+    }
+
+    .navbar-brand {
+        min-width: 0;
+        flex-shrink: 1;
+    }
+
     .navbar .navbar-nav .nav-link  {
         margin-left: 0;
         padding: 10px 0;
     }
 
-    /* Prevent rare horizontal scroll from full-bleed carousels / wide stage on small screens */
-    html {
-        overflow-x: hidden;
+    /* Full-width stack aligned to the same left edge as the wordmark (no ms-auto “column”) */
+    .navbar-collapse .navbar-nav.ms-auto {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        width: 100%;
+        max-width: 100%;
+        align-items: flex-start;
+    }
+
+    .navbar-collapse {
+        flex-basis: 100%;
+        flex-grow: 1;
+        align-self: stretch;
+        width: 100%;
+        max-width: 100%;
+        margin-top: 0;
+        margin-left: 0;
+        margin-right: 0;
+        padding-top: 0.1875rem;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .navbar-collapse .navbar-nav .nav-link {
+        text-align: left;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
     }
 
     .owl-carousel,
@@ -119,14 +176,38 @@
         max-width: 100%;
     }
 
-    /* Clear open/close affordance: Bootstrap sets aria-expanded on the toggler */
+    /* Hamburger ↔ close: opacity-only crossfade (no scale jump); matched timing feels calmer */
+    .navbar-toggler {
+        position: relative;
+        flex-shrink: 0;
+    }
+
     .navbar-toggler .navbar-toggler-icon {
-        transition: background-image 0.2s ease, transform 0.2s ease;
+        position: relative;
+        z-index: 1;
+        transition: opacity 0.22s ease-out;
     }
 
     .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
-        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%2303201F'%3e%3cpath d='M2.146 2.854a.5.5 0 1 1 .708-.708L8 6.586 14.293.293a.5.5 0 1 1 .708.708L9.414 8l6.293 6.293a.5.5 0 0 1-.708.708L8 9.414l-6.293 6.293a.5.5 0 0 1-.708-.708L6.586 8 2.146 2.854Z'/%3e%3c/svg%3e");
-        background-size: 1.15em;
+        opacity: 0;
+    }
+
+    .navbar-toggler::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        margin: auto;
+        width: 1.1em;
+        height: 1.1em;
+        z-index: 2;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.22s ease-out;
+        background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%2303201F'%3e%3cpath d='M2.146 2.854a.5.5 0 1 1 .708-.708L8 6.586 14.293.293a.5.5 0 1 1 .708.708L9.414 8l6.293 6.293a.5.5 0 0 1-.708.708L8 9.414l-6.293 6.293a.5.5 0 0 1-.708-.708L6.586 8 2.146 2.854Z'/%3e%3c/svg%3e") center center / contain no-repeat;
+    }
+
+    .navbar-toggler[aria-expanded="true"]::after {
+        opacity: 1;
     }
 }
 
