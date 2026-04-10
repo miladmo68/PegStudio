@@ -16,12 +16,32 @@
     new WOW().init();
 
 
-    // Sticky Navbar
-    $(window).scroll(function () {
-        if ($(this).scrollTop() > 300) {
-            $('.sticky-top').addClass('bg-white shadow-sm').css('top', '0px');
+    // Sticky Navbar (negative top is desktop-only; mobile stays top: 0 so the collapse aligns correctly)
+    function pegStickyNav() {
+        var y = $(window).scrollTop();
+        var desktop = window.matchMedia('(min-width: 992px)').matches;
+        var $sticky = $('.sticky-top');
+        if (y > 300) {
+            $sticky.addClass('bg-white shadow-sm').css('top', '0px');
         } else {
-            $('.sticky-top').removeClass('bg-white shadow-sm').css('top', '-150px');
+            $sticky.removeClass('bg-white shadow-sm');
+            $sticky.css('top', desktop ? '-150px' : '0px');
+        }
+    }
+    $(window).on('scroll resize', pegStickyNav);
+    pegStickyNav();
+
+    // Mobile: tap outside open navbar to close (Bootstrap does not do this by default)
+    $(document).on('click.pegNavDismiss', function (e) {
+        if (window.innerWidth >= 992) return;
+        var collapseEl = document.getElementById('navbarCollapse');
+        if (!collapseEl || !collapseEl.classList.contains('show')) return;
+        var toggler = document.querySelector('.navbar [data-bs-target="#navbarCollapse"]');
+        if (!toggler) return;
+        if (toggler.contains(e.target) || collapseEl.contains(e.target)) return;
+        if (typeof bootstrap !== 'undefined' && bootstrap.Collapse) {
+            var inst = bootstrap.Collapse.getInstance(collapseEl);
+            if (inst) inst.hide();
         }
     });
     

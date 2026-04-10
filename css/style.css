@@ -55,8 +55,14 @@
 
 /*** Navbar ***/
 .sticky-top {
-    top: -150px;
     transition: .5s;
+}
+
+/* Desktop: tuck bar over hero until scroll. Mobile: keep top at 0 so collapse menu sits flush under the bar. */
+@media (min-width: 992px) {
+    .sticky-top {
+        top: -150px;
+    }
 }
 
 .navbar {
@@ -93,9 +99,34 @@
 }
 
 @media (max-width: 991.98px) {
+    .sticky-top {
+        top: 0;
+    }
+
     .navbar .navbar-nav .nav-link  {
         margin-left: 0;
         padding: 10px 0;
+    }
+
+    /* Prevent rare horizontal scroll from full-bleed carousels / wide stage on small screens */
+    html {
+        overflow-x: hidden;
+    }
+
+    .owl-carousel,
+    .header-carousel,
+    .peg-hero-carousel {
+        max-width: 100%;
+    }
+
+    /* Clear open/close affordance: Bootstrap sets aria-expanded on the toggler */
+    .navbar-toggler .navbar-toggler-icon {
+        transition: background-image 0.2s ease, transform 0.2s ease;
+    }
+
+    .navbar-toggler[aria-expanded="true"] .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%2303201F'%3e%3cpath d='M2.146 2.854a.5.5 0 1 1 .708-.708L8 6.586 14.293.293a.5.5 0 1 1 .708.708L9.414 8l6.293 6.293a.5.5 0 0 1-.708.708L8 9.414l-6.293 6.293a.5.5 0 0 1-.708-.708L6.586 8 2.146 2.854Z'/%3e%3c/svg%3e");
+        background-size: 1.15em;
     }
 }
 
